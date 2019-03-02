@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Newman integration with Jenkins",
   "scripts": {
-    "api-tests": "newman run NGWorkshop.collection.json -e NGWorkshop.environment.json -g globals.json --folder 'Workflows' --reporters junit,cli --reporter-junit-export report.xml"
+    "api-tests": "newman run NGWorkshop.collection.json -e NGWorkshop.environment.json -g globals.json --folder 'Workflows' --reporters junit,cli,html --reporter-junit-export report.xml --reporter-html-export report.html"
   },
   "author": "Matyss",
   "license": "ISC",
