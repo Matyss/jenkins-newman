@@ -1,0 +1,13 @@
+{
+  "name": "jenkins-newman",
+  "version": "1.0.0",
+  "description": "Newman integration with Jenkins",
+  "scripts": {
+    "api-tests": "newman run newmanTest.collection.json"
+  },
+  "author": "Matyss",
+  "license": "ISC",
+  "dependencies": {
+    "newman": "^4.4.0"
+  }
+}
