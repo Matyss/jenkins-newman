@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Newman integration with Jenkins",
   "scripts": {
-    "api-tests": "newman run newmanTest.collection.json"
+    "api-tests": "newman run NGWorkshop.collection.json -e NGWorkshop.environment.json -g globals.json --folder 'Workflows'"
   },
   "author": "Matyss",
   "license": "ISC",

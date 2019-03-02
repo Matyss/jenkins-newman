@@ -1,0 +1,72 @@
+{
+	"id": "ffd7e060-f292-46fe-bf56-224333c0db8f",
+	"name": "NGWorkshop",
+	"values": [
+		{
+			"key": "rootURL",
+			"value": "https://jsonplaceholder.typicode.com",
+			"description": "",
+			"enabled": true
+		},
+		{
+			"key": "rootMeethubURL",
+			"value": "https://api.meethub.tk/api/v2",
+			"description": "",
+			"enabled": true
+		},
+		{
+			"key": "password",
+			"value": "password906",
+			"enabled": true
+		},
+		{
+			"key": "userName",
+			"value": "bob+1550662479221@example.com",
+			"enabled": true
+		},
+		{
+			"key": "userToken",
+			"value": "Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJtZWV0aHViIiwiZXhwIjoxNTUwODM5MDY4LCJpYXQiOjE1NTA2NjYyNjgsImlzcyI6Im1lZXRodWIiLCJqdGkiOiJkNGU5NGNjMy1mZjE1LTQ3NDAtOTQ3NS0yOTkwNjk3MGY3YjIiLCJuYmYiOjE1NTA2NjYyNjcsInN1YiI6IjgyNWYxMmYyLTM1MDMtMTFlOS1iYTc5LWZhMTYzZTJmOGYwZiIsInR5cCI6ImFjY2VzcyJ9.BI7i0fjy4l8qO8hCoj5RGezYjXajlD1rrwCnUA8mwIT7NoptFwXcB8st_Xqq0uWB2U7S0ny0A9nBMZ9CNCucyw",
+			"enabled": true
+		},
+		{
+			"key": "iteration",
+			"value": "0",
+			"description": "",
+			"enabled": true
+		},
+		{
+			"key": "currentName",
+			"value": "Burrito",
+			"enabled": true
+		},
+		{
+			"key": "newPassword",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "city",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "firstName",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "bio",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "birthDate",
+			"value": "",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2019-03-02T13:14:36.912Z",
+	"_postman_exported_using": "Postman/6.7.3"
+}

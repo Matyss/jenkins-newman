@@ -1,0 +1,1571 @@
+{
+	"info": {
+		"_postman_id": "a305a844-011f-400a-b86a-833f746b21ee",
+		"name": "NG Workshop",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Basics",
+			"item": [
+				{
+					"name": "Get posts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{rootURL}}/posts",
+							"host": [
+								"{{rootURL}}"
+							],
+							"path": [
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get posts with parameter",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{rootURL}}/posts?userId=5",
+							"host": [
+								"{{rootURL}}"
+							],
+							"path": [
+								"posts"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create post",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"userId\": 5,\n\t\"title\": \"Test title post\",\n\t\"body\": \"This is some sample body\"\n}"
+						},
+						"url": {
+							"raw": "{{rootURL}}/posts",
+							"host": [
+								"{{rootURL}}"
+							],
+							"path": [
+								"posts"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Practice - JSON",
+			"item": [
+				{
+					"name": "Object in array by porp",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6a3494d1-3927-4569-9da4-daa4dc9c31e8",
+								"exec": [
+									"/*  ",
+									"    Consider below object as parsed JSON response from server. This endpoint relfects the filtering on",
+									"    some web e-commerce site. We want to test the isActive property of the given filters.",
+									"",
+									"    The task is to write a function that will check and print if the value of isActive property ",
+									"    for given filter equals TRUE/FALSE",
+									"*/",
+									"",
+									"// Response from the server",
+									"const jsonBody = {",
+									"  \"companyId\": 2351,",
+									"  \"state\": 012,",
+									"  \"filters\": [",
+									"    {",
+									"      \"id\": 101,",
+									"      \"name\": \"CATEGORY\",",
+									"      \"isActive\": false",
+									"    },",
+									"    {",
+									"      \"id\": 102,",
+									"      \"name\": \"COUNTRY\",",
+									"      \"isActive\": true",
+									"    },",
+									"    {",
+									"      \"id\": 103,",
+									"      \"name\": \"MANUFACTURER\",",
+									"      \"isActive\": false",
+									"    }",
+									"  ]",
+									"};",
+									"",
+									"// Test function",
+									"function checkFilterStatus(filterName, serverResponse) {",
+									"    const filterIndex = serverResponse.filters.map(filter => filter.name).indexOf(filterName.toUpperCase());",
+									"    const filterObject = serverResponse.filters[filterIndex];",
+									"    try {",
+									"        if(filterObject.isActive) {",
+									"            console.log('Filter is ON');",
+									"        } else {",
+									"            console.log('Filter is OFF');",
+									"        }",
+									"    } catch(err) {",
+									"        console.error(err, 'Make sure that provided filter name is correct');",
+									"    }",
+									"}",
+									"",
+									"checkFilterStatus('country', jsonBody);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{rootURL}}",
+							"host": [
+								"{{rootURL}}"
+							]
+						},
+						"description": "Basic objects manipulation"
+					},
+					"response": []
+				},
+				{
+					"name": "Nested object name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "a7989742-bc82-4d21-b53e-a02cb7d2eafa",
+								"exec": [
+									"/* ",
+									"    In this example, we want to check the status of ordered items. ",
+									"    However, the order object has alphanumerick key, indicating that it's assigned as unique prop and ",
+									"    changes with every order. ",
+									"    ",
+									"    Write the function that will check the items' statuses for particular order.",
+									"*/",
+									"",
+									"// Response from the server",
+									"const jsonBody = {",
+									"  \"clientId\": \"23985d412bGGS13k17l3402\",",
+									"  \"order\": {",
+									"    \"004321h85KL414-134N\": {",
+									"      \"items\": {",
+									"        \"JavaScript for QA Engineers\": {",
+									"          \"count\": 12,",
+									"          \"status\": \"On time\",",
+									"          \"type\": \"Software/IT\",",
+									"          \"category\": \"BOOK\"",
+									"        },",
+									"        \"Dell 27 fullHD\": {",
+									"          \"count\": 1,",
+									"          \"status\": \"Delayed\",",
+									"          \"type\": \"Monitor\",",
+									"          \"category\": \"COMPUTERS\"",
+									"        }",
+									"      }",
+									"    }",
+									"  }",
+									"};",
+									"",
+									"// Test function",
+									"function checkOrderStatus(serverResponse) {",
+									"    const order = serverResponse.order;",
+									"    for(let key in order) {",
+									"        if (order[key].hasOwnProperty('items')) {",
+									"            const orderNames = Object.keys(order[key].items);",
+									"            const orderItems = order[key].items;",
+									"            orderNames.forEach(key => {",
+									"                console.log(`Your order of ${key} is: ${orderItems[key].status}`);",
+									"            });",
+									"        }",
+									"    }",
+									"}",
+									"",
+									"checkOrderStatus(jsonBody);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{rootURL}}",
+							"host": [
+								"{{rootURL}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "These are practical examples of working with JSON files"
+		},
+		{
+			"name": "BDD Intro",
+			"item": [
+				{
+					"name": "Simple Postman BDD",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "20b9ce96-9955-4741-a906-5981e09720cc",
+								"exec": [
+									"// request that will PASS",
+									"pm.test('Response time is less than 200ms', () => {",
+									"   pm.expect(responseTime).to.be.below(200); ",
+									"});",
+									"",
+									"// request that will FAIL",
+									"pm.test('Response time to be more than 200ms', () => {",
+									"    pm.expect(responseTime).to.be.above(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{rootURL}}/users",
+							"host": [
+								"{{rootURL}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "First Chai BDD",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "20b9ce96-9955-4741-a906-5981e09720cc",
+								"exec": [
+									"// Evalutae the string as a JS code",
+									"eval(globals.postmanBDD);",
+									"",
+									"// Parse the response to JSON",
+									"const jsonBody = JSON.parse(responseBody);",
+									"",
+									"// Check if the response has objects inside",
+									"describe('Server response', () => {",
+									"    it('should contain a non-empty list of users', () => {",
+									"        expect(jsonBody).to.be.an('Array');",
+									"        expect(jsonBody).to.have.length.above(0);",
+									"    });",
+									"});",
+									"",
+									"// Chain two assertions into one",
+									"describe('Server response', () => {",
+									"    it('should contain a non-empty list of users', () => {",
+									"        expect(jsonBody).to.be.an('Array').that.have.length.above(0);",
+									"    });",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{rootURL}}/users",
+							"host": [
+								"{{rootURL}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Practise BDD",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "20b9ce96-9955-4741-a906-5981e09720cc",
+								"exec": [
+									"/* ",
+									"    This time we go a step further and I need you to do the following:",
+									"        1. Create the method that will:",
+									"            a). take a user ID as an argument",
+									"            b). and check how many posts that user wrote",
+									"        2. Write the scenario with one test case to assert that posts is a number === 10",
+									"*/",
+									"",
+									"// Evalutae the string as a JS code",
+									"eval(globals.postmanBDD);",
+									"",
+									"// Parse the response to JSON",
+									"const jsonBody = JSON.parse(responseBody);",
+									"",
+									"// Actual test function",
+									"describe('Posts list', () => {",
+									"    it('should have 10 initial posts for given user', () => {",
+									"        ",
+									"        // Helper function to check number of posts for given userId",
+									"        const checkUserPosts = function(userId = 1) {",
+									"            userPosts = [];",
+									"",
+									"            jsonBody.forEach(el => {",
+									"                (el.userId === userId) ? userPosts.push(el) : null;",
+									"            });",
+									"    ",
+									"            return userPosts.length;",
+									"        };",
+									"        ",
+									"        // Assertion",
+									"        expect(checkUserPosts(6)).to.be.a('Number').that.equals(10);",
+									"    });",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "77773cca-a468-418a-9d24-4f87a9ec5dd7",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{rootURL}}/posts",
+							"host": [
+								"{{rootURL}}"
+							],
+							"path": [
+								"posts"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Meethub_part_1",
+			"item": [
+				{
+					"name": "UserAccount",
+					"item": [
+						{
+							"name": "CurrentUser noAuth",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{rootMeethubURL}}/user_accounts/me",
+									"host": [
+										"{{rootMeethubURL}}"
+									],
+									"path": [
+										"user_accounts",
+										"me"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "RegisterUser",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"data\": {\n    \"type\": \"user-account\",\n    \"attributes\": {\n      \"email\": \"bob.something@example.com\",\n      \"password\": \"pass123\",\n      \"password-confirmation\": \"pass123\",\n      \"terms-and-conditions-accepted\": true\n    }\n  }\n}\n"
+								},
+								"url": {
+									"raw": "{{rootMeethubURL}}/user_accounts",
+									"host": [
+										"{{rootMeethubURL}}"
+									],
+									"path": [
+										"user_accounts"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "LoginUser",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"email\": \"bob.something@example.com\",\n\t\"password\": \"pass123\"\n}\n"
+								},
+								"url": {
+									"raw": "{{rootMeethubURL}}/auth/token",
+									"host": [
+										"{{rootMeethubURL}}"
+									],
+									"path": [
+										"auth",
+										"token"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CurrentUser Auth",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJtZWV0aHViIiwiZXhwIjoxNTQ5NTU2MjA5LCJpYXQiOjE1NDkzODM0MDksImlzcyI6Im1lZXRodWIiLCJqdGkiOiJlZWJiMzJiZC0zOGJmLTRhMzctOTI5Yy1lMWFhOTIwYzRmYjkiLCJuYmYiOjE1NDkzODM0MDgsInN1YiI6IjUwMDY5MDBjLTI5NWQtMTFlOS04MmNlLWZhMTYzZTJmOGYwZiIsInR5cCI6ImFjY2VzcyJ9.Lm7EqnspRmH_o2yeQmo0bArQxb8X02boiczRhKlx_nyH2sylH3WBBUF0OKqjhI48QEHCyxOmAFmOigQzUN59EQ",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{rootMeethubURL}}/user_accounts/me",
+									"host": [
+										"{{rootMeethubURL}}"
+									],
+									"path": [
+										"user_accounts",
+										"me"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "UserAccount Auto",
+					"item": [
+						{
+							"name": "LoginUser 2nd",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "574be0d5-2e90-4209-a9e6-cd5de81ccabd",
+										"exec": [
+											"eval(globals.postmanBDD);",
+											"",
+											"const jsonBody = JSON.parse(responseBody);",
+											"",
+											"describe('Server response', () => {",
+											"    it('should return code 201', () => {",
+											"        response.should.have.status(201);",
+											"    });",
+											"    ",
+											"    it('should have time below 600ms', () => {",
+											"        responseTime.should.be.below(600);",
+											"    });",
+											"    ",
+											"    // Long example",
+											"    it('should return non-empty access token string', () => {",
+											"        ",
+											"        // 1. Either we assume there's a access_token prop",
+											"        expect(jsonBody.access_token).to.be.a('String').that.has.length.above(0);",
+											"        ",
+											"        // 2. Or we check this too",
+											"        jsonBody.should.have.property('access_token').that.has.length.above(0);",
+											"        ",
+											"        // 3. Be super specific",
+											"        jsonBody.should.have.property('access_token').that.is.a('String').and.has.length(376);",
+											"    });",
+											"    ",
+											"    // Variable declaration",
+											"    it('should save access_token to environment variable', () => {",
+											"        // Set",
+											"        pm.environment.set('userToken', `Bearer ${jsonBody.access_token}`);",
+											"        ",
+											"        // Get",
+											"        expect(pm.environment.get('userToken')).to.equal(`Bearer ${jsonBody.access_token}`);",
+											"    });",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"email\": \"bob.something@example.com\",\n\t\"password\": \"pass123\"\n}\n"
+								},
+								"url": {
+									"raw": "{{rootMeethubURL}}/auth/token",
+									"host": [
+										"{{rootMeethubURL}}"
+									],
+									"path": [
+										"auth",
+										"token"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CurrentUser noAuth 1st",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "4b773e8f-9acd-4d15-9e96-375b3cc22f3a",
+										"exec": [
+											"eval(globals.postmanBDD);",
+											"",
+											"const jsonBody = JSON.parse(responseBody);",
+											"",
+											"describe('User account', () => {",
+											"    it('has the terms of use accepted', () => {",
+											"        expect(jsonBody.data.attributes['terms-and-conditions-accepted']).to.equal(true);    ",
+											"    });",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{rootMeethubURL}}/user_accounts/me",
+									"host": [
+										"{{rootMeethubURL}}"
+									],
+									"path": [
+										"user_accounts",
+										"me"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CurrentUser Auth 3rd",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "4b773e8f-9acd-4d15-9e96-375b3cc22f3a",
+										"exec": [
+											"eval(globals.postmanBDD);",
+											"",
+											"const jsonBody = JSON.parse(responseBody);",
+											"",
+											"describe('User account', () => {",
+											"    it('has the terms of use accepted', () => {",
+											"        expect(jsonBody.data.attributes['terms-and-conditions-accepted']).to.equal(true);    ",
+											"    });",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{userToken}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{rootMeethubURL}}/user_accounts/me",
+									"host": [
+										"{{rootMeethubURL}}"
+									],
+									"path": [
+										"user_accounts",
+										"me"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				}
+			],
+			"description": "Custom API created for testing purpose"
+		},
+		{
+			"name": "Dynamic variables",
+			"item": [
+				{
+					"name": "Register existing user",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"data\": {\n    \"type\": \"user-account\",\n    \"attributes\": {\n      \"email\": \"bob.something@example.com\",\n      \"password\": \"pass123\",\n      \"password-confirmation\": \"pass123\",\n      \"terms-and-conditions-accepted\": true\n    }\n  }\n}\n"
+						},
+						"url": {
+							"raw": "{{rootMeethubURL}}/user_accounts",
+							"host": [
+								"{{rootMeethubURL}}"
+							],
+							"path": [
+								"user_accounts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register unique user",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"data\": {\n        \"type\": \"user-account\",\n        \"attributes\": {\n            \"email\": \"bob.something+{{$timestamp}}@example.com\",\n            \"password\": \"pass123\",\n            \"password-confirmation\": \"pass123\",\n            \"terms-and-conditions-accepted\": true\n        }\n    }\n}"
+						},
+						"url": {
+							"raw": "{{rootMeethubURL}}/user_accounts",
+							"host": [
+								"{{rootMeethubURL}}"
+							],
+							"path": [
+								"user_accounts"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Meethub_part_2",
+			"item": [
+				{
+					"name": "Registration flow runner",
+					"item": [
+						{
+							"name": "RegisterUser",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "0dae65d0-90de-44d8-b09b-78f002140b08",
+										"exec": [
+											"var _ = require('lodash');",
+											"",
+											"const userName = `bob+${_.random(999)}@example.com`,",
+											"      password = 'pass123';",
+											"",
+											"pm.environment.set('userName', userName);",
+											"pm.environment.set('password', password);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "594e2bc1-0263-4558-a2aa-63ff6223ab3e",
+										"exec": [
+											"eval(globals.postmanBDD);",
+											"",
+											"const jsonBody = JSON.parse(responseBody);",
+											"",
+											"// Create the tests specific for this request",
+											"",
+											"describe('Server response', () => {",
+											"    it('should return code 201', () => {",
+											"        response.should.have.status(201);",
+											"    });",
+											"    ",
+											"    it(\"should have header with content-type application/json\", () => {",
+											"        response.headers['content-type'].should.have.string('application/json');",
+											"    });",
+											"});",
+											"",
+											"describe('User object', () => {",
+											"    it('should contain requested userName', () => {",
+											"        expect(jsonBody.data.attributes.email).to.equal(pm.environment.get('userName'));",
+											"    });",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"data\": {\n    \"type\": \"user-account\",\n    \"attributes\": {\n      \"email\": \"{{userName}}\",\n      \"password\": \"{{password}}\",\n      \"password-confirmation\": \"{{password}}\",\n      \"terms-and-conditions-accepted\": true\n    }\n  }\n}\n"
+								},
+								"url": {
+									"raw": "{{rootMeethubURL}}/user_accounts",
+									"host": [
+										"{{rootMeethubURL}}"
+									],
+									"path": [
+										"user_accounts"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CurrentUser",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "09535653-e353-47cc-be00-f811c8b81a36",
+										"exec": [
+											"eval(globals.postmanBDD);",
+											"",
+											"const jsonBody = JSON.parse(responseBody);",
+											"",
+											"describe('CurrentUser endpoint', () => {",
+											"    it('should return code 200', () => {",
+											"        response.should.have.status(200);",
+											"    });",
+											"    ",
+											"    it('should return user-account data type', () => {",
+											"        expect(jsonBody.data.type).to.equal('user-account');",
+											"    });",
+											"    ",
+											"     it('should return account-status: inactive', () => {",
+											"        expect(jsonBody.data.attributes['account-status']).to.equal('inactive');",
+											"    });",
+											"    ",
+											"     it('should return correct email address', () => {",
+											"        expect(jsonBody.data.attributes.email).to.equal(pm.environment.get('userName'));",
+											"    });",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{userToken}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{rootMeethubURL}}/user_accounts/me",
+									"host": [
+										"{{rootMeethubURL}}"
+									],
+									"path": [
+										"user_accounts",
+										"me"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				}
+			]
+		},
+		{
+			"name": "CommonTests",
+			"item": [
+				{
+					"name": "Set of common tests",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "bf4e09e6-304b-4492-8a6f-b59189f884d1",
+								"exec": [
+									"eval(globals.postmanBDD);",
+									"",
+									"describe('Server response', () => {",
+									"    it('should have code 2XX', () => {",
+									"        pm.response.to.be.success;",
+									"    });",
+									"    ",
+									"    it('should have acceptable time', () => {",
+									"        responseTime.should.be.below(500);",
+									"    });",
+									"    ",
+									"    it(\"should have header with type property\", () => {",
+									"        response.should.have.property('headers').that.have.property('content-type');",
+									"    });",
+									"",
+									"    it(\"should have header with type application/json\", () => {",
+									"        response.headers['content-type'].should.have.string('application/vnd.api+json');",
+									"    });",
+									"    ",
+									"    it('should have json body', () => {",
+									"        pm.response.to.be.json;",
+									"    });",
+									"    ",
+									"    it('should return scurity __cfduid cookie', () => {",
+									"        pm.expect(pm.cookies.has('__cfduid')).to.be.true;",
+									"    });",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{userToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{rootMeethubURL}}/user_profiles/me",
+							"host": [
+								"{{rootMeethubURL}}"
+							],
+							"path": [
+								"user_profiles",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Tests as global",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "bf4e09e6-304b-4492-8a6f-b59189f884d1",
+								"exec": [
+									"eval(globals.postmanBDD);",
+									"eval(globals.ngCommonTests);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{userToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{rootMeethubURL}}/user_profiles/me",
+							"host": [
+								"{{rootMeethubURL}}"
+							],
+							"path": [
+								"user_profiles",
+								"me"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "DataFeed",
+			"item": [
+				{
+					"name": "userLogin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "574be0d5-2e90-4209-a9e6-cd5de81ccabd",
+								"exec": [
+									"eval(globals.postmanBDD);",
+									"",
+									"const jsonBody = JSON.parse(responseBody);",
+									"",
+									"describe('Server response', () => {",
+									"    it('should return code 201', () => {",
+									"        response.should.have.status(201);",
+									"    });",
+									"",
+									"    it('should return non-empty access token string', () => {",
+									"        jsonBody.should.have.property('access_token').that.has.length.above(0);",
+									"    });",
+									"    ",
+									"     it('should save access_token to environment variable', () => {",
+									"        pm.environment.set('userToken', `Bearer ${jsonBody.access_token}`);",
+									"     });",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"{{email}}\",\n    \"password\": \"{{password}}\"\n}"
+						},
+						"url": {
+							"raw": "{{rootMeethubURL}}/auth/token",
+							"host": [
+								"{{rootMeethubURL}}"
+							],
+							"path": [
+								"auth",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "currentUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "b76c486c-c524-48d4-bd87-e32624264526",
+								"exec": [
+									"eval(globals.postmanBDD);",
+									"",
+									"const jsonBody = JSON.parse(responseBody);",
+									"",
+									"describe('Current user', () => {",
+									"    it('should be logged in', () => {",
+									"        response.should.have.status(200);",
+									"        console.log(`Logged in as: ${jsonBody.data.attributes.email}`);",
+									"    });",
+									"});",
+									"",
+									"//Shows that env can be changed en exported",
+									"let currentIteration = parseInt(pm.environment.get('iteration'));",
+									"console.log(`Current iteration: ${currentIteration}`);",
+									"",
+									"let nextIteration = currentIteration+1;",
+									"pm.environment.set('iteration', nextIteration);",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{userToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{rootMeethubURL}}/user_accounts/me",
+							"host": [
+								"{{rootMeethubURL}}"
+							],
+							"path": [
+								"user_accounts",
+								"me"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Custom API created for testing purpose"
+		},
+		{
+			"name": "Workflows",
+			"item": [
+				{
+					"name": "createUser",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "c7b3c7f2-fd15-45cd-b96b-cd1935aa0970",
+								"exec": [
+									"var _ = require('lodash');",
+									"",
+									"const userName = `bob+${Date.now()}@example.com`,",
+									"      password = `password${_.random(1000)}`,",
+									"      firstName = 'Bob',",
+									"      city = 'Szczecin',",
+									"      birthDate = '1990-10-12',",
+									"      bio = `Hi I'm Bob and my profile has just got successfully updated`;",
+									"      ",
+									"      ",
+									"pm.environment.set('userName', userName);",
+									"pm.environment.set('password', password);",
+									"pm.environment.set('firstName', firstName);",
+									"pm.environment.set('city', city);",
+									"pm.environment.set('birthDate', birthDate);",
+									"pm.environment.set('bio', bio);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "2e22fc68-72fe-4583-8b13-f32851df1c7b",
+								"exec": [
+									"if(responseCode.code === 201) {",
+									"    try {",
+									"        console.log('User registered, moving to Login');",
+									"    }",
+									"    catch(e) {",
+									"        console.log(e);",
+									"        throw false;",
+									"    }",
+									"}",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"data\": {\n    \"type\": \"user-account\",\n    \"attributes\": {\n      \"email\": \"{{userName}}\",\n      \"password\": \"{{password}}\",\n      \"password-confirmation\": \"{{password}}\",\n      \"terms-and-conditions-accepted\": true\n    }\n  }\n}\n"
+						},
+						"url": {
+							"raw": "{{rootMeethubURL}}/user_accounts",
+							"host": [
+								"{{rootMeethubURL}}"
+							],
+							"path": [
+								"user_accounts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "loginUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "8719d8f0-9812-4a3a-8272-ba783545bbb4",
+								"exec": [
+									"eval(globals.postmanBDD);",
+									"",
+									"const jsonBody = JSON.parse(responseBody);",
+									"",
+									"describe('LoginUser endpoint', () => {",
+									"    it('should return code 201', () => {",
+									"        response.should.have.status(201);",
+									"    });",
+									"    it('should save access_token to environment variable', () => {",
+									"        pm.environment.set('userToken', `Bearer ${jsonBody.access_token}`);",
+									"        ",
+									"        expect(pm.environment.get('userToken')).to.equal(`Bearer ${jsonBody.access_token}`);",
+									"        ",
+									"        console.log('Loggin in as ' + pm.environment.get('userName'));",
+									"        console.log('User logged in, moving to currentUser check');",
+									"    });",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\": \"{{userName}}\",\n\t\"password\": \"{{password}}\"\n}\n"
+						},
+						"url": {
+							"raw": "{{rootMeethubURL}}/auth/token",
+							"host": [
+								"{{rootMeethubURL}}"
+							],
+							"path": [
+								"auth",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "currentUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "09535653-e353-47cc-be00-f811c8b81a36",
+								"exec": [
+									"eval(globals.postmanBDD);",
+									"",
+									"const jsonBody = JSON.parse(responseBody);",
+									"",
+									"const { attributes } = jsonBody.data,",
+									"      city = attributes.city,",
+									"      birthDate = attributes['birth-date'],",
+									"      userName = attributes.name,",
+									"      description = attributes.description;",
+									"",
+									"describe('UserProfile endpoint', () => {",
+									"    it('should return code 200', () => {",
+									"        response.should.have.status(200);",
+									"    });",
+									"    ",
+									"    it('should return user-account data type', () => {",
+									"        expect(jsonBody.data.type).to.equal('user-profile');",
+									"    });",
+									"});",
+									"",
+									"if((description === '') && (city === '')) {",
+									"    postman.setNextRequest('editUserProfile');",
+									"    console.log('No user profile update, moving to editUserProfile');",
+									"} else {",
+									"    describe('CurrentUser profile details', () => {",
+									"        it('should contain atrtribute name: Bob', () => {",
+									"            expect(userName).to.equal(pm.environment.get('firstName'));",
+									"        });",
+									"            ",
+									"        it('should contain atrtribute city: Szczecin', () => {",
+									"            expect(city).to.equal(pm.environment.get('city'));",
+									"        });",
+									"        ",
+									"        it('should contain description', () => {",
+									"            expect(description).to.be.a('String').that.has.length.above(20);",
+									"        });",
+									"        ",
+									"        console.log('User profile updated, moving to deleteUser');",
+									"    });",
+									"    ",
+									"    postman.setNextRequest('meetings');",
+									"}",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{userToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{rootMeethubURL}}/user_profiles/me",
+							"host": [
+								"{{rootMeethubURL}}"
+							],
+							"path": [
+								"user_profiles",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "editUserProfile",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1ad0ca05-52c6-4d32-b3a8-e5159e2e54c2",
+								"exec": [
+									"eval(globals.postmanBDD);",
+									"",
+									"const jsonBody = JSON.parse(responseBody);",
+									"",
+									"",
+									"describe('CurrentUser endpoint', () => {",
+									"    it('should return code 200', () => {",
+									"        response.should.have.status(200);",
+									"    });",
+									"    console.log('Updating user profile, moving to currentUser check');",
+									"});",
+									"",
+									"postman.setNextRequest('currentUser');",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{userToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"data\": {\n    \"type\": \"user-profile\",\n    \"attributes\": {\n      \"name\": \"{{firstName}}\",\n      \"birth-date\": \"{{birthDate}}\",\n      \"city\": \"{{city}}\",\n      \"description\": \"{{bio}}\"\n    }\n  }\n}"
+						},
+						"url": {
+							"raw": "{{rootMeethubURL}}/user_profiles/me",
+							"host": [
+								"{{rootMeethubURL}}"
+							],
+							"path": [
+								"user_profiles",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "meetings",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "b3d77107-3ecd-4d73-80d4-51fa15a31ba0",
+								"exec": [
+									"eval(globals.postmanBDD);",
+									"",
+									"const jsonBody = JSON.parse(responseBody);",
+									"",
+									"describe('LoginUser endpoint', () => {",
+									"    it('should return code 200', () => {",
+									"        response.should.have.status(200);",
+									"    });",
+									"    ",
+									"    const numMeetings = jsonBody.data.length;",
+									"    console.log('Found ' + numMeetings + ' meetings in Poznan');",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{userToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{rootMeethubURL}}/meetings?filter[lat]=52.39&filter[lng]=16.93&filter[distance]=4",
+							"host": [
+								"{{rootMeethubURL}}"
+							],
+							"path": [
+								"meetings"
+							],
+							"query": [
+								{
+									"key": "filter[lat]",
+									"value": "52.39"
+								},
+								{
+									"key": "filter[lng]",
+									"value": "16.93"
+								},
+								{
+									"key": "filter[distance]",
+									"value": "4"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Custom API created for testing purpose",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "e0d537a8-ee62-4093-9f17-6386b8165e11",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "7aab3bd8-e32e-4d61-8eab-4cbe12235055",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	]
+}
